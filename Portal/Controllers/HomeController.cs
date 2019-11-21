@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Portal.Core;
+using Portal.Services;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -7,12 +8,12 @@ namespace Portal.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly HttpClient _httpClient;
+        private readonly ITimeService _service;
         private static int _requestsCounter = 0;
 
-        public HomeController(HttpClient httpClient)
+        public HomeController(ITimeService service)
         {
-            _httpClient = httpClient;
+            _service = service;
         }
 
         public  async Task<IActionResult> Index()
@@ -22,7 +23,7 @@ namespace Portal.Controllers
                 return BadRequest(Messages.THREAD_IS_NO_THREAD_AVAILABLE);
 
             // Busca as informações de data da API TimeAPI
-            var result = await _httpClient.GetStringAsync(Program.API_ADDRESS);
+            var result = await _service.GetTime();
 
             //Aplica os Valores para View e informações de memória 
             ViewData.SetResult(result, HashKey.From(result))

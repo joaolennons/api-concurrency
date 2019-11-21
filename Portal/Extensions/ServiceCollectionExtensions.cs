@@ -1,11 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http;
+using Portal.Services;
 
 namespace Portal
 {
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddDependencies(this IServiceCollection services)
-            => services.AddSingleton<HttpClient>();
+        {
+            services.AddHttpClient<ITimeService, TimeService>();
+            return services;
+        }
     }
 }
